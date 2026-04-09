@@ -1,16 +1,17 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080/api/students";
-
-// GET BY ID
-export const getStudentById = async (id) => {
-  const response = await axios.get(`${BASE_URL}/${id}`);
-  return response.data;
-};
+const BASE_URL =
+  (process.env.REACT_APP_API_URL || "http://localhost:8080") + "/api/students";
 
 // GET ALL
 export const getAllStudents = async () => {
   const response = await axios.get(BASE_URL);
+  return response.data;
+};
+
+// GET BY ID
+export const getStudentById = async (id) => {
+  const response = await axios.get(`${BASE_URL}/${id}`);
   return response.data;
 };
 

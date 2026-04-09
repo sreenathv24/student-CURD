@@ -8,7 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "https://student-curd-88903.web.app/")
+
+@CrossOrigin(origins = {
+    "https://student-curd-88903.web.app",
+    "https://student-curd-88903.firebaseapp.com",
+    "http://localhost:3000"
+})
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {

@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: student-management-api
+    runtime: java
+    plan: free
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -jar target/StudentManagementSystemApplication-1.0.0.jar
+    envVars:
+      - key: DB_URL
+        value: jdbc:mysql://localhost:3306/student_db
+      - key: DB_USER
+        value: root
+      - key: DB_PASSWORD
+        value: root@123
+    healthCheckPath: /api/students

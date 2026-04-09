@@ -9,11 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = {
-    "https://student-curd-88903.web.app",
-    "https://student-curd-88903.firebaseapp.com",
-    "http://localhost:3000"
-})
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
@@ -37,7 +33,7 @@ public class StudentController {
 
     // GET - Get student by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+    public ResponseEntity<Student> getStudentById(@PathVariable("id") Long id) {
         Student student = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
         return ResponseEntity.ok(student);
@@ -45,7 +41,7 @@ public class StudentController {
 
     // PUT - Update student
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student studentDetails) {
+    public ResponseEntity<Student> updateStudent(@PathVariable("id") Long id, @RequestBody Student studentDetails) {
         Student student = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
@@ -59,7 +55,7 @@ public class StudentController {
 
     // DELETE - Delete student
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteStudent(@PathVariable("id") Long id) {
         repository.deleteById(id);
         return ResponseEntity.noContent().build();
     }

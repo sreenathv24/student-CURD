@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { updateStudent } from "../services/studentService";
-import NavigationButtons from "../components/NavigationButtons";
 
 function UpdateStudent() {
   const [id, setId] = useState("");
@@ -9,55 +8,85 @@ function UpdateStudent() {
     email: "",
     course: ""
   });
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     setStudent({ ...student, [e.target.name]: e.target.value });
   };
+  const handleUpdate = async (e) => {
+    e.preventDefault();
 
-  const handleUpdate = async () => {
+    if (!id) {
+      setMessage("❌ Please enter a student ID");
+      return;
+    }
     try {
       await updateStudent(Number(id), student);
-      alert("✅ Updated successfully");
+      setMessage("✅ Student updated successfully");
     } catch {
-      alert("❌ Update failed");
+      setMessage("❌ Update failed");
     }
   };
 
   return (
-    <div>
+    <section className="panel">
       <h2>Update Student</h2>
+      <form className="student-form" onSubmit={handleUpdate}>
+        <label className="field">
+          <span>Student ID</span>
+          <input
+            type="number"
+            min="1"
+            placeholder="Enter student ID"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+            required
+          />
+        </label>
 
-      <input
-        placeholder="Enter ID"
-        value={id}
-        onChange={(e) => setId(e.target.value)}
-      />
+        <label className="field">
+          <span>Name</span>
+          <input
+            name="name"
+            placeholder="Updated name"
+            value={student.name}
+            onChange={handleChange}
+            required
+          />
+        </label>
 
-      <input
-        name="name"
-        placeholder="Name"
-        value={student.name}
-        onChange={handleChange}
-      />
+        <label className="field">
+          <span>Email</span>
+          <input
+            name="email"
+            type="email"
+            placeholder="updated@email.com"
+            value={student.email}
+            onChange={handleChange}
+            required
+          />
+        </label>
 
-      <input
-        name="email"
-        placeholder="Email"
-        value={student.email}
-        onChange={handleChange}
-      />
+        <label className="field">
+          <span>Course</span>
+          <input
+            name="course"
+            placeholder="Updated course"
+            value={student.course}
+            onChange={handleChange}
+            required
+          />
+        </label>
 
-      <input
-        name="course"
-        placeholder="Course"
-        value={student.course}
-        onChange={handleChange}
-      />
+        <button className="btn-primary" type="submit">Update Student</button>
+      </form>
 
-      <button onClick={handleUpdate}>Update</button>
-
-      <NavigationButtons />
-    </div>
+      {message && (
+        <p className={`status ${message.startsWith("✅") ? "success" : "error"}`}>
+          {message}
+        </p>
+      )}
+    </section>
   );
 }
 

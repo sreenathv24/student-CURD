@@ -1,33 +1,53 @@
 import React, { useState } from "react";
 import { deleteStudent } from "../services/studentService";
-import NavigationButtons from "../components/NavigationButtons";
 
 function DeleteStudent() {
   const [id, setId] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleDelete = async () => {
+  const handleDelete = async (e) => {
+    e.preventDefault();
+
+    if (!id) {
+      setMessage("❌ Please enter a student ID");
+      return;
+    }
+
     try {
       await deleteStudent(Number(id));
-      alert("✅ Deleted successfully");
-    } catch (err) {
-      alert("❌ Delete failed");
+      setMessage("✅ Student deleted successfully");
+      setId("");
+    } catch {
+      setMessage("❌ Delete failed");
     }
   };
 
   return (
-    <div>
-      <NavigationButtons />
-
+    <section className="panel">
       <h2>Delete Student</h2>
 
-      <input
-        placeholder="Enter ID"
-        value={id}
-        onChange={(e) => setId(e.target.value)}
-      />
+      <form className="student-form" onSubmit={handleDelete}>
+        <label className="field">
+          <span>Student ID</span>
+          <input
+            type="number"
+            min="1"
+            placeholder="Enter student ID"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+            required
+          />
+        </label>
 
-      <button onClick={handleDelete}>Delete</button>
-    </div>
+        <button className="btn-primary" type="submit">Delete Student</button>
+      </form>
+
+      {message && (
+        <p className={`status ${message.startsWith("✅") ? "success" : "error"}`}>
+          {message}
+        </p>
+      )}
+    </section>
   );
 }
 

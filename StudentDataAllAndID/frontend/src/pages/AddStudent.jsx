@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { createStudent } from "../services/studentService";
-import NavigationButtons from "../components/NavigationButtons";
 
 function AddStudent() {
   const [student, setStudent] = useState({
@@ -23,27 +22,59 @@ function AddStudent() {
     try {
       await createStudent(student);
       setMessage("✅ Student added successfully");
+      setStudent({ name: "", email: "", course: "" });
     } catch {
       setMessage("❌ Error adding student");
     }
   };
 
   return (
-    <div>
-      <NavigationButtons />
+    <section className="panel">
 
       <h2>Add Student</h2>
+      <form className="student-form" onSubmit={handleSubmit}>
+        <label className="field">
+          <span>Name</span>
+          <input
+            name="name"
+            placeholder="Enter full name"
+            value={student.name}
+            onChange={handleChange}
+            required
+          />
+        </label>
 
-      <form onSubmit={handleSubmit}>
-        <input name="name" placeholder="Name" onChange={handleChange} />
-        <input name="email" placeholder="Email" onChange={handleChange} />
-        <input name="course" placeholder="Course" onChange={handleChange} />
+        <label className="field">
+          <span>Email</span>
+          <input
+            name="email"
+            type="email"
+            placeholder="student@email.com"
+            value={student.email}
+            onChange={handleChange}
+            required
+          />
+        </label>
 
-        <button type="submit">Add</button>
+        <label className="field">
+          <span>Course</span>
+          <input
+            name="course"
+            placeholder="Course name"
+            value={student.course}
+            onChange={handleChange}
+            required
+          />
+        </label>
+
+        <button className="btn-primary" type="submit">Add Student</button>
       </form>
-
-      <p>{message}</p>
-    </div>
+      {message && (
+        <p className={`status ${message.startsWith("✅") ? "success" : "error"}`}>
+          {message}
+        </p>
+      )}
+    </section>
   );
 }
 
